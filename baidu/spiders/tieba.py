@@ -35,14 +35,29 @@ class TiebaSpider(Spider):
         for tieba in tiebas:
             item = BaiduItem()
             # 初始化item并进行赋值保存
-            item['title'] = response.meta['title']
-            item['tag'] = response.meta['tag']
-            item['name'] = tieba.xpath('a/div/p[@class="ba_name"]/text()').extract()[0]
-            item['img'] = tieba.xpath('a/img/@src').extract()[0]
-            item['user_num'] = tieba.xpath('a/div/p[@class="ba_num clearfix"]/span[@class="ba_m_num"]/text()').extract()[0]
-            item['topic_num'] = tieba.xpath('a/div/p[@class="ba_num clearfix"]/span[@class="ba_p_num"]/text()').extract()[0]
-            item['description'] = tieba.xpath('a/div/p[@class="ba_desc"]/text()').extract()[0]
-            item['url'] = 'http://tieba.baidu.com/' + tieba.xpath('a/@href').extract()[0]
+            try:
+                try:
+                    item['title'] = response.meta['title']
+                except KeyError:
+                    item['title'] = 'title invalid!'
+                try:
+                    item['tag'] = response.meta['tag']
+                except:
+                    item['tag'] = 'tag invalid!'
+                item['name'] = tieba.xpath('a/div/p[@class="ba_name"]/text()').extract()[0]
+                item['img'] = tieba.xpath('a/img/@src').extract()[0]
+                item['user_num'] = tieba.xpath('a/div/p[@class="ba_num clearfix"]/span[@class="ba_m_num"]/text()').extract()[0]
+                item['topic_num'] = tieba.xpath('a/div/p[@class="ba_num clearfix"]/span[@class="ba_p_num"]/text()').extract()[0]
+                try:
+                    item['description'] = tieba.xpath('a/div/p[@class="ba_desc"]/text()').extract()[0]
+                except KeyError:
+                    item['description'] = 'not find description!'
+                except IndexError:
+                    item['description'] = 'not find description!'
+                item['url'] = 'http://tieba.baidu.com' + tieba.xpath('a/@href').extract()[0]
+            except Exception as e:
+                print('------------------------')
+                print(e)
             yield item
         next_url = response.xpath('//*[@class="next"]/@href').extract()
         if next_url:
