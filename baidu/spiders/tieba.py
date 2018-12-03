@@ -29,7 +29,7 @@ class TiebaSpider(Spider):
 
     def get_tieba(self, response):
         '''
-        根据分类爬取此类型所有的贴吧
+        根据分类爬取此类型所有的贴吧信息
         '''
         tiebas = response.xpath('//*[@id="ba_list"]/div')
         for tieba in tiebas:
@@ -64,4 +64,4 @@ class TiebaSpider(Spider):
             # 按段是否存在下一页，存在则翻页抓取
             url = 'http://tieba.baidu.com/' + next_url[0]
             # print(url)
-            yield Request(url, callback=self.get_tieba)
+            yield Request(url, callback=self.get_tieba, meta={'title':response.meta['title'],'tag':response.meta['tag']})

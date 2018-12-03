@@ -23,8 +23,8 @@ class BaiduPipeline(object):
             title=pymysql.escape_string(item.get('title')),
             tag=pymysql.escape_string(item.get('tag')),
             name=pymysql.escape_string(item.get('name')),
-            user_num=pymysql.escape_string(item.get('user_num')),
-            topic_num=pymysql.escape_string(item.get('topic_num')),
+            user_num=int(pymysql.escape_string(item.get('user_num'))),
+            topic_num=int(pymysql.escape_string(item.get('topic_num'))),
             description=pymysql.escape_string(item.get('description')),
             img=pymysql.escape_string(item.get('img')),
             url=pymysql.escape_string(item.get('url')))
